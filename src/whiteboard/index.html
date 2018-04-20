@@ -1,0 +1,19 @@
+<!-- This is an example use of the subscription model for a living room server -->
+<html>
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <style>
+      canvas { background-color: rgba(58, 67, 84, 0.7) }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+      document.write(decodeURIComponent(`%3Cscript src="http://${window.location.hostname}:3000/socket.io/socket.io.js"%3E%3C%2Fscript%3E`))
+    </script>
+    <script src="./lib/room.browser.js"></script>
+    <script src="../display.js"></script>
+  </body>
+</html>

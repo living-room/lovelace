@@ -4,55 +4,13 @@
 const room = new window.room(`http://${window.location.hostname}:3000`)
 const context = canvas.getContext('2d')
 
-let animals = new Map()
-let labels = new Map()
+let texts = new Map()
 let circles = new Map()
 let lines = new Map()
 
-const setAnimals = ({ assertions, retractions }) => {
-  retractions.forEach(({ name, x, y }) => {
-    const animal = animals.get(name.word)
-    if (animal && animal.x === x && animal.y === y) {
-      animals.delete(name.word)
-    }
-  })
-
-  if (assertions) {
-    console.dir({ assertions })
-    assertions.forEach(animal => {
-      animals.set(animal.name.word, {
-        name: animal.name.word,
-        x: animal.x.value,
-        y: animal.y.value
-      })
-    })
-  }
-}
-
-// Set up some demo data
-async function getAnimals () {
-  let { assertions } = await room.select(`$name is a $type animal at ($x, $y)`)
-  const names = assertions.map(animal => animal.name.word)
-  if (!names.includes('Simba')) {
-    await room.assert(`Simba is a cat animal at (0.5, 0.1)`)
-  }
-  if (!names.includes('Timon')) {
-    await room.assert(`Timon is a meerkat animal at (0.4, 0.6)`)
-  }
-  if (!names.includes('Pumba')) {
-    await room.assert(`Pumba is a warthog animal at (0.55, 0.6)`)
-  }
-  room
-    .select(`$name is a $type animal at ($x, $y)`)
-    .then(assertions => setAnimals({ assertions, retractions: [] }))
-}
-
-// Query animals
-room.subscribe(`$name is a $type animal at ($x, $y)`, setAnimals)
-
 // Query labels
 room.subscribe(
-  `$name is a label at ($x, $y)`,
+  `draw text $name at ($x, $y)`,
   ({ assertions, retractions }) => {
     retractions.forEach(({ name }) => labels.delete(name.word))
 
