@@ -1,6 +1,6 @@
 {
   "name": "@living-room/lovelace",
-  "version": "0.4.1",
+  "version": "0.6.2",
   "description": "all the stuff running in rc/lovelace",
   "repository": "https://github.com/living-room/lovelace",
   "author": "Jonathan Dahan",
@@ -22,16 +22,17 @@
     "subscribe": "npx room subscribe"
   },
   "dependencies": {
-    "@living-room/client-js": "^0.5.6",
-    "@living-room/service-js": "^0.5.8",
+    "@living-room/client-js": "^0.6.2",
+    "@living-room/service-js": "^0.6.2",
     "boxen": "^1.3.0",
     "chalk": "^2.4.1",
     "chance": "^1.0.16",
+    "http-port-forward": "^2.0.3",
     "node-compat-require": "^1.0.3",
     "node-fetch": "^2.1.2",
     "npm-run-all": "^4.1.3",
     "ping": "^0.2.2",
     "prettier-standard": "^8.0.1",
-    "serve": "^6.5.7"
+    "serve": "^6.5.8"
   }
 }

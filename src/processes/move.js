@@ -8,7 +8,7 @@ module.exports = room => {
     `$name is a $species animal at ($x, $y) @ $previous`,
     `time is $current`,
     `move is active`,
-    ({name, species, x, y, previous, current}) => {
+    async ({name, species, x, y, previous, current}) => {
       if (current < previous) return
       const speed = await room.select(`${name} has speed ($dx, $dy)`)
       if (speed.length === 0) return
