@@ -14,8 +14,9 @@ module.exports = room => {
       if (speed.length === 0) return
       const {dx: {value: dx}, dy: {value: dy}} = speed[speed.length - 1]
 
-      room.retract(`${name} is a ${species} animal at (${x}, ${y}) @ ${previous}`)
-      room.assert(`${name} is a ${species} animal at (${x + dx}, ${y + dy}) @ ${current + 1}`)
+      room
+        .retract(`${name} is a ${species} animal at (${x}, ${y}) @ ${previous}`)
+        .assert(`${name} is a ${species} animal at (${x + dx}, ${y + dy}) @ ${current + 1}`)
     }
   )
 

@@ -31,8 +31,10 @@ module.exports = room => {
     }
   )
 
+/*
   room.assert('sight is active')
   for (let key in metadata) {
     room.assert(`sight has ${key} "${metadata[key]}"`)
   }
+  */
 }

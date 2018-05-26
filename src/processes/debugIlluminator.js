@@ -30,7 +30,7 @@ module.exports = async room => {
       activeProcesses.has('debugIlluminator') &&
       !activeProcesses.get('debugIlluminator').active
     ) {
-      facts.forEach(room.retract.bind(room))
+      facts.forEach(fact => room.retract(fact))
       Array.from(activeProcesses.entries()).forEach(([name, { index }]) => {
         const y = (2 + index + 1) * em
         const fact = `whiteboard: draw label ${name} at (${right_x}, ${y})`
@@ -42,7 +42,7 @@ module.exports = async room => {
       activeProcesses.has('debugIlluminator') &&
       activeProcesses.get('debugIlluminator').active
     ) {
-      facts.forEach(room.assert.bind(room))
+      facts.forEach(fact => room.assert(fact))
       Array.from(activeProcesses.entries()).forEach(
         ([name, { index, active }]) => {
           const y = (2 + index + 1) * em

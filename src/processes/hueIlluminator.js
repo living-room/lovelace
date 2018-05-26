@@ -4,19 +4,16 @@
 module.exports = async room => {
   room.subscribe(
     `hueIlluminator is active`,
-    `glow$id has hueIndex $hueIndex at ($x, $y)`,
+    `glow$ has hueIndex $ at ($x, $y)`,
     ({ assertions, retractions }) => {
-      const updateFact = ({ id, hueIndex, x, y }, fn) => {
-        const fact = `table: draw a (0, 255, 255) halo around (${x}, ${y}) with radius 0.05`
-        fn(fact)
-      }
-
-      retractions.forEach(retraction =>
-        updateFact(retraction, room.retract.bind(room))
-      )
-      assertions.forEach(assertion =>
-        updateFact(assertion, room.assert.bind(room))
-      )
+      retractions.forEach(({ x, y }) =>
+        room.retract(`table: draw a (0, 255, 255) halo around (${x}, ${y}) with radius 0.05`)
+            .then(console.dir)
+      })
+      assertions.forEach(({ x, y }) =>
+        room.assert(`table: draw a (0, 255, 255) halo around (${x}, ${y}) with radius 0.05`)
+            .then(console.dir)
+      })
     }
   )
 
