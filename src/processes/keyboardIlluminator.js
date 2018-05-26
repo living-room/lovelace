@@ -12,15 +12,19 @@ module.exports = async room => {
     ({ code, type, value, seq }) => {
       if (code !== 4) return
       if (type !== 4) return
-      room.retract(
-        `whiteboard: draw small text "${buf.join(' ')}" at (0.05, 0.60)`
-      )
+      const previous = `whiteboard: draw small text "${buf.join(
+        ' '
+      )}" at (0.05, 0.60)`
       buf[seq] = value - 458700
-      room.assert(
-        `whiteboard: draw small text "${buf.join(' ')}" at (0.05, 0.60)`
-      )
+      const current = `whiteboard: draw small text "${buf.join(
+        ' '
+      )}" at (0.05, 0.60)`
+      room
+        .retract(previous)
+        .assert(current)
+        .then()
     }
   )
 
-  room.assert(`keyboardIlluminator is active`)
+  room.assert(`keyboardIlluminator is active`).then()
 }

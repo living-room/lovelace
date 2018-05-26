@@ -15,8 +15,10 @@ module.exports = room => {
     `$name is a $ animal at ($x, $y) @ $t`,
     `$name sees $distance`,
     ({ name, x, y }) => {
-      room.retract(`table: draw a (255, 127, 127) halo at ($, $)`)
-      room.assert(`table: draw a (255, 127, 127) halo at (${x}, ${y})`)
+      room
+        .retract(`table: draw a (255, 127, 127) halo at ($, $)`)
+        .assert(`table: draw a (255, 127, 127) halo at (${x}, ${y})`)
+        .then()
     }
   )
 }

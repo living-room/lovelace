@@ -134,7 +134,10 @@ room.subscribe(`draw $size text $text at ($x, $y)`, updateText)
 room.subscribe(`${namespace}: draw $size text $text at ($x, $y)`, updateText)
 
 room.subscribe(`draw $size text $text at ($x, $y) at angle $angle`, updateText)
-room.subscribe(`${namespace}: draw $size text $text at ($x, $y) at angle $angle`, updateText)
+room.subscribe(
+  `${namespace}: draw $size text $text at ($x, $y) at angle $angle`,
+  updateText
+)
 
 // Query lines
 room.subscribe(

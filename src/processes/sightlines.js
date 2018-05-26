@@ -10,19 +10,23 @@ module.exports = room => {
     `$b is a $ animal at ($bx, $by) @ $`,
     `sightlines is active`,
     ({ assertions, retractions }) => {
-      retractions.forEach(({ a, b, ax, ay, bx, by}) =>
+      retractions.forEach(({ a, b, ax, ay, bx, by }) => {
         if (a === b) return
         room
-          .retract(`table: draw a (255, 127, 255) line from (${ax}, ${ay}) to (${bx}, ${by})`)
-          .then(console.dir)
-      )
+          .retract(
+            `table: draw a (255, 127, 255) line from (${ax}, ${ay}) to (${bx}, ${by})`
+          )
+          .then()
+      })
 
-      assertions.forEach(({ a, b, ax, ay, bx, by}) =>
+      assertions.forEach(({ a, b, ax, ay, bx, by }) => {
         if (a === b) return
         room
-          .assert(`table: draw a (255, 127, 255) line from (${ax}, ${ay}) to (${bx}, ${by})`)
-          .then(console.dir)
-      )
+          .assert(
+            `table: draw a (255, 127, 255) line from (${ax}, ${ay}) to (${bx}, ${by})`
+          )
+          .then()
+      })
     }
   )
 }

@@ -31,7 +31,7 @@ module.exports = room => {
         const drawfact = `whiteboard: draw small text "${fact}" at (${x}, ${y})`
         console.log(`retract: ${drawfact}`)
         lastseen.delete(mac)
-        room.retract(drawfact)
+        room.retract(drawfact).then()
       })
     }
   )
@@ -43,7 +43,7 @@ module.exports = room => {
         ping.sys.probe(ip, isAlive => {
           if (!isAlive) {
             const fact = `"${mac}" got ip "${ip}"`
-            return room.retract(fact)
+            return room.retract(fact).then()
           }
           lastseen.set(mac, { mac, ip, x, y, date: Date.now() })
         })

@@ -5,13 +5,14 @@ module.exports = room => {
     room = new Room()
   }
 
-  room.assert(`time is 1`)
-
   room.on(`time is $t`, ({ t }) => {
     setTimeout(() => {
       room
         .retract(`time is ${t}`)
         .assert(`time is ${t + 1}`)
+        .then()
     }, 1000)
   })
+
+  room.assert(`time is 1`).then()
 }

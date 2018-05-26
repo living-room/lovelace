@@ -6,16 +6,22 @@ module.exports = async room => {
     `hueIlluminator is active`,
     `glow$ has hueIndex $ at ($x, $y)`,
     ({ assertions, retractions }) => {
-      retractions.forEach(({ x, y }) =>
-        room.retract(`table: draw a (0, 255, 255) halo around (${x}, ${y}) with radius 0.05`)
-            .then(console.dir)
+      retractions.forEach(({ x, y }) => {
+        room
+          .retract(
+            `table: draw a (0, 255, 255) halo around (${x}, ${y}) with radius 0.05`
+          )
+          .then(console.dir)
       })
-      assertions.forEach(({ x, y }) =>
-        room.assert(`table: draw a (0, 255, 255) halo around (${x}, ${y}) with radius 0.05`)
-            .then(console.dir)
+      assertions.forEach(({ x, y }) => {
+        room
+          .assert(
+            `table: draw a (0, 255, 255) halo around (${x}, ${y}) with radius 0.05`
+          )
+          .then(console.dir)
       })
     }
   )
 
-  room.assert(`hueIlluminator is active`)
+  room.assert(`hueIlluminator is active`).then()
 }

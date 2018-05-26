@@ -23,18 +23,16 @@ module.exports = room => {
         const seesFact = `${a} sees ${b}`
 
         if (Math.sqrt(dx * dx + dy * dy) < Math.sqrt(distance * distance)) {
-          room.assert(seesFact)
+          room.assert(seesFact).then()
         } else {
-          room.retract(seesFact)
+          room.retract(seesFact).then()
         }
       })
     }
   )
 
-/*
-  room.assert('sight is active')
+  room.assert('sight is active').then()
   for (let key in metadata) {
-    room.assert(`sight has ${key} "${metadata[key]}"`)
+    room.assert(`sight has ${key} "${metadata[key]}"`).then()
   }
-  */
 }

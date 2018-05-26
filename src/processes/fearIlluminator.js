@@ -11,7 +11,7 @@ module.exports = async room => {
         const debug = `${name} ${how} afraid of ${otherspecies}`
 
         const fact = `whiteboard: draw small text "${debug}" at (${x}, ${y})`
-        room.assert(fact)
+        room.assert(fact).then()
         y -= em
       })
     }

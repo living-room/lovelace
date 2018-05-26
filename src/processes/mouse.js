@@ -39,7 +39,7 @@ module.exports = room => {
 
       const timeout = 100 * (10 - i)
       setTimeout(() => {
-        room.retract(fact)
+        room.retract(fact).then()
       }, timeout)
     }
   })

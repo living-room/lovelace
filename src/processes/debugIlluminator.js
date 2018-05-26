@@ -48,14 +48,14 @@ module.exports = async room => {
           const y = (2 + index + 1) * em
           const fact = `whiteboard: draw label ${name} at (${right_x}, ${y})`
           if (active) {
-            room.assert(fact)
+            room.assert(fact).then()
           } else {
-            room.retract(fact)
+            room.retract(fact).then()
           }
         }
       )
     }
   })
 
-  room.assert('debugIlluminator is active')
+  room.assert('debugIlluminator is active').then()
 }
