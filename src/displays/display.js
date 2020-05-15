@@ -128,6 +128,180 @@ const updateHalo = ({ assertions, retractions }) => {
   scheduleDraw()
 }
 
+// text-box is a kind of element
+// text-box elements have style "border: 2px solid; border-radius: 4px; font-size: 20px;"
+// text-box elements have a "value" handled by javascript "this.textContent = value"
+// text-box elements have a "size" handled by javascript "this.style.fontSize = size"
+//
+// kb-in-1 is a text-box element
+// text-box element kb-in-1 has value "Hello, world!"
+
+class MetaElement {
+  constructor (containerEl) {
+    this.instances = {};
+    this.attributes = {};
+    this.properties = {};
+    this.el = containerEl;
+  }
+
+  setAttribute (name, value) {
+    this.attributes[name] = value;
+    for (let k in this.instances) {
+      this.instances[k].setAttribute(name, value);
+    }
+  }
+
+  removeAttribute (name) {
+    delete this.attributes[name];
+    for (let k in this.instances) {
+      this.instances[k].removeAttribute(name);
+    }
+  }
+
+  defineProperty (name, fn) {
+    this.properties[name] = fn;
+  }
+
+  removeProperty (name) {
+    delete this.properties[name];
+  }
+
+  createInstance(instanceName) {
+    let el = this.instances[instanceName];
+    if (el)
+      return;
+    el = document.createElement('div');
+    for (let k in this.attributes) {
+      el.setAttribute(k, this.attributes[k]);
+    }
+    this.instances[instanceName] = el;
+    this.el.appendChild(el);
+  }
+
+  deleteInstance(instanceName) {
+    let el = this.instances[instanceName];
+    if (!el)
+      return;
+    delete this.instances[instanceName];
+    this.el.removeChild(el);
+  }
+
+  updateProperty (instanceName, propertyName, value) {
+    let instance = this.instances[instanceName];
+    let propertyFn = this.properties[propertyName];
+    if (!instance || !propertyFn)
+      return;
+    propertyFn.call(instance, value);
+  }
+}
+
+class MetaMetaElement {
+  constructor () {
+    this.elementTypes = {};
+    this.el = document.createElement('div');
+
+    // TODO: Save facts about unknown or deleted types, and replay them if such
+    // a type comes into existence.
+    // this.elementFactsByType = {};
+
+    let niceFact = fact => {
+      console.log(fact);
+      let nice = {};
+      for (let k in fact) {
+        let v = fact[k]
+        nice[k] = v.word || v.value;
+      }
+      return nice;
+    };
+
+    let subscribe = (pattern, assert, retract) => {
+      room.subscribe(pattern, ({ assertions, retractions }) => {
+        for (let fact of assertions) {
+          assert(niceFact(fact));
+        }
+        for (let fact of retractions) {
+          retract(niceFact(fact));
+        }
+      });
+    };
+
+    subscribe(`$name is a kind of element`,
+      newFact => {
+        if (newFact.name in this.elementTypes)
+          return;
+        this.elementTypes[newFact.name] = new MetaElement(this.el);
+      },
+      retractedFact => {
+        let type = this.elementTypes[retractedFact.name];
+        if (!type)
+          return;
+        type.tearDown();
+        delete this.elementTypes[retractedFact.name];
+      }
+    )
+    subscribe(`$name elements have $attribute $value`,
+      newFact => {
+        let type = this.elementTypes[newFact.name];
+        if (!type)
+          return;
+        type.setAttribute(newFact.attribute, newFact.value);
+      },
+      retractedFact => {
+        let type = this.elementTypes[retractedFact.name];
+        if (!type)
+          return;
+        type.removeAttribute(retractedFact.attribute);
+      }
+    )
+    subscribe(`$name elements have a $property handled by javascript $code`,
+      newFact => {
+        let type = this.elementTypes[newFact.name];
+        if (!type)
+          return;
+        type.defineProperty(newFact.property, new Function(newFact.property, newFact.code));
+      },
+      retractedFact => {
+        let type = this.elementTypes[name];
+        if (!type)
+          return;
+        type.removeProperty(newFact.property);
+      }
+    )
+    subscribe(`$instanceName is a $name element`,
+      newFact => {
+        let type = this.elementTypes[newFact.name];
+        if (!type)
+          return;
+        type.createInstance(newFact.name);
+      },
+      retractedFact => {
+        let type = this.elementTypes[name];
+        if (!type)
+          return;
+        type.deleteInstance(newFact.name);
+      }
+    )
+    subscribe(`$name element $instanceName has $property $value`,
+      newFact => {
+        let type = this.elementTypes[newFact.name];
+        if (!type)
+          return;
+        type.updateProperty(newFact.instanceName, newFact.property, newFact.value);
+      },
+      retractedFact => {
+        let type = this.elementTypes[name];
+        if (!type)
+          return;
+        type.updateProperty(newFact.instanceName, newFact.property, null);
+      }
+    )
+  }
+}
+
+let metaMetaElement = new MetaMetaElement();
+metaMetaElement.el.className = 'metaElements';
+document.body.appendChild(metaMetaElement.el);
+
 // Query labels
 room.subscribe(`draw label $name at ($x, $y)`, updateLabel)
 room.subscribe(`${namespace}: draw label $name at ($x, $y)`, updateLabel)
